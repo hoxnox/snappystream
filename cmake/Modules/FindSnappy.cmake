@@ -1,0 +1,37 @@
+# Find Snappy
+# Merder Kim <hoxnox@gmail.com>
+# 
+# input:
+#  SNAPPY_ROOT
+#
+# output:
+#  SNAPPY_FOUND
+#  SNAPPY_INCLUDE_DIR
+#  SNAPPY_LIBRARIES
+#
+
+if(SNAPPY_INCLUDE_DIR AND SNAPPY_LIBRARIES)
+	set(SNAPPY_FIND_QUITELY TRUE) # cached
+endif(SNAPPY_INCLUDE_DIR AND SNAPPY_LIBRARIES)
+
+if(NOT DEFINED SNAPPY_ROOT)
+	set(SNAPPY_ROOT /usr /usr/local $ENV{SNAPPY_ROOT})
+endif(NOT DEFINED SNAPPY_ROOT)
+
+find_path(SNAPPY_INCLUDE_DIR snappy.h
+	PATHS ${SNAPPY_ROOT}
+	PATH_SUFFIXES snappy/include include
+)
+
+find_library(SNAPPY_LIBRARIES
+	NAMES snappy
+	PATHS ${SNAPPY_ROOT}
+	PATH_SUFFIXES lib
+)
+mark_as_advanced(SNAPPY_INCLUDE_DIR SNAPPY_LIBRARIES)
+
+
+include("${CMAKE_ROOT}/Modules/FindPackageHandleStandardArgs.cmake")
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Snappy DEFAULT_MSG SNAPPY_INCLUDE_DIR SNAPPY_LIBRARIES)
+
+
