@@ -28,10 +28,10 @@ Format description (from javadoc of Dain Sundstorm project):
 
 ## Quick start
 
-1. install snappy and cmake using emerge, apt, or whatever
-2. execute 
+install snappy and cmake using emerge, apt, or whatever
 
-	@cmd
+execute 
+
 	cd /tmp
 	git clone git://github.com/hoxnox/snappy-stream.git
 	cd snappy-stream
@@ -41,9 +41,8 @@ Format description (from javadoc of Dain Sundstorm project):
 	make
 	g++ -I../include -L./ ../doc/examples/example_main.cpp -lsnappystream -lsnappy -oexample
 	./example
-	@endcmd
 
-3. Generate doc for futher reading (you will need doxygen)
+Generate doc for futher reading (you will need doxygen)
 
 	make doc
 
