@@ -22,9 +22,10 @@
 
 @section intro Introduction
 
-There is [snappy compressor][snappy], but it doesn't have default stream realisation.
+There is [snappy compressor from google][snappy], but it doesn't have default stream realisation.
 This project aim to release C++ stream for snappy with format, compatible with [java realisation by
-Dain Sundstrom][snjava].
+Dain Sundstrom][snjava]. So you can use, for example, java realisation for compression and C++ for
+decompression, or vice versa.
 
 Format description (from javadoc of Dain Sundstorm project):
 
@@ -45,10 +46,36 @@ Format description (from javadoc of Dain Sundstorm project):
 [snappy]:http://code.google.com/p/snappy/
 [snjava]:http://github.com/dain/snappy#stream-format
 
-Usage example:
+@section quickstart Quick start
+
+1. install snappy and cmake using emerge, apt, or whatever
+2. execute 
+
+   @cmd
+   cd /tmp
+   git clone git://github.com/hoxnox/snappy-stream.git
+   cd snappy-stream
+   mkdir build
+   cd build
+   cmake ../
+   make
+   g++ -I../include -L./ ../doc/examples/example_main.cpp -lsnappystream -lsnappy -oexample
+   ./example
+   @endcmd
+
+3. Generate doc for futher reading (you will need doxygen)
+
+   @cmd
+   make doc
+   @endcmd
+
+@section exmaple Usage example
 
 Building and linking (assume snappy-stream - directory with the project, snappy-stream/build - build dir:
-	g++ -I"snappy-stream/include" -L"snappy-stream/build" example.cpp -lsnappystream
+
+@cmd
+g++ -I"snappy-stream/include" -L"snappy-stream/build" example.cpp -lsnappystream
+@endcmd
 
 @include example_main.cpp
 
