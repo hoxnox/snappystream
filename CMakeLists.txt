@@ -33,8 +33,8 @@ set(SNSTRM_VERSION_MAJOR 0)
 set(SNSTRM_VERSION_MINOR 1)
 # configuration header
 configure_file(
-	"${PROJECT_SOURCE_DIR}/snappy-stream.cfg"
-	"${PROJECT_SOURCE_DIR}/src/snappy-stream-cfg.hpp"
+	"${PROJECT_SOURCE_DIR}/snappystream.cfg"
+	"${PROJECT_SOURCE_DIR}/include/snappystreamcfg.hpp"
 	ESCAPE_QUOTES
 )
 
@@ -46,10 +46,19 @@ include_directories("${PROJECT_SOURCE_DIR}/src")
 find_package(Snappy REQUIRED)
 include_directories(${SNAPPY_INCLUDE_DIR})
 
-set(SRC ./src/snappy-stream.cpp ./include/snappy-stream.h)
+set(SRC ./include/osnappystream.hpp
+        ./src/osnappystream.cpp
+        ./include/isnappystream.hpp
+        ./src/isnappystream.cpp
+        ./src/crc32c.h
+        ./src/crc32c.c
+        ./include/snappystreamcfg.hpp
+        ./src/snappystreamcfg.cpp
+        ./src/endians.hpp)
 nx_add_library(${PROJECT_NAME} ${SNSTRM_FORCE_SHARED_CRT} ${BUILD_STATIC_LIBS} ${BUILD_SHARED_LIBS}
 	"SNSTRM_SHARED" "ver" "${SRC}")
 target_link_libraries(${PROJECT_NAME} ${SNAPPY_LIBRARIES})
+set(LIBRARIES ${PROJECT_NAME})
 
 ###########################################################################
 # docs
@@ -67,14 +76,17 @@ endif()
 
 if( BUILD_TESTS )
 	set(SOURCES_TEST
-		./src/snappy-stream.hpp
-		./src/snappy-stream.cpp
+		./include/osnappystream.hpp
+		./src/osnappystream.cpp
+		./include/isnappystream.hpp
+		./src/isnappystream.cpp
+		./src/snappystreamcfg.cpp
+		./src/crc32c.h
+		./src/crc32c.c
+		./test/test.cpp
+		./test/tsnappystream.hpp
+		./test/tcrc32c.hpp
 	)
-	if(NOT WITHOUT_ODBC_STORAGE)
-		list(APPEND SOURCE_TEST
-			./src/odbc_storage.hpp
-			./src/odbc_storage.cpp)
-	endif()
 	if(BUILD_GTEST)
 		#TODO: Find and check GTEST_SOURCES
 		set(GTEST_SOURCES "${PROJECT_SOURCE_DIR}/../gtest")
@@ -82,7 +94,7 @@ if( BUILD_TESTS )
 		set(TEST test_${PROJECT_NAME})
 				include_directories("${GTEST_SOURCES}/src")
 		add_executable(${TEST} ${SOURCES_TEST})
-		target_link_libraries("${TEST}" gtest ${LIBRARIES})
+		target_link_libraries("${TEST}" gtest ${SNAPPY_LIBRARIES})
 		nx_GTEST_ADD_TESTS("${TEST}" ${SOURCES_TEST})
 	else(BUILD_GTEST)
 		enable_testing()
@@ -93,7 +105,7 @@ if( BUILD_TESTS )
 		if(NOT WIN32)
 			SET_TARGET_PROPERTIES(${TEST} PROPERTIES LINK_FLAGS -pthread)
 		endif(NOT WIN32)
-		target_link_libraries("${TEST}" ${GTEST_LIBRARIES} ${LIBRARIES} )
+		target_link_libraries("${TEST}" ${GTEST_LIBRARIES} ${SNAPPY_LIBRARIES})
 		nx_GTEST_ADD_TESTS("${TEST}" ${SOURCES_TEST})
 	endif(BUILD_GTEST)
 else( BUILD_TESTS )

@@ -10,7 +10,8 @@
 #include <gtest/gtest.h>
 
 // test cases
-#include "tsnappy-stream.hpp"
+#include "tsnappystream.hpp"
+#include "tcrc32c.hpp"
 
 int main(int argc, char *argv[])
 {
