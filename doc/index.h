@@ -47,6 +47,9 @@ Format description (from javadoc of Dain Sundstorm project):
 
 Usage example:
 
+Building and linking (assume snappy-stream - directory with the project, snappy-stream/build - build dir:
+	g++ -I"snappy-stream/include" -L"snappy-stream/build" example.cpp -lsnappystream
+
 @include example_main.cpp
 
 

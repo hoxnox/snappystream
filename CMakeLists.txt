@@ -24,7 +24,7 @@ option(GENERATE_DOC "Don't generate docs" ON)
 ###############################################################################
 # general
 
-project(snappy_stream)
+project(snappystream)
 
 include("${PROJECT_SOURCE_DIR}/cmake/ext/nx_utils.cmake")
 nx_configure()

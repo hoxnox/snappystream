@@ -1,5 +1,5 @@
 #include <fstream>
-#include <snappy-stream.hpp>
+#include <snappystream.hpp>
 
 void write()
 {
@@ -12,11 +12,11 @@ void write()
 
 void read()
 {
-	std::ifstream ifile("snappy-file")
+	std::ifstream ifile("snappy-file");
 	if(!ifile.is_open())
 		return;
-	snappy::iSnappyStream isnstrm(ofile);
-	std::cout << isnstrm.rd_buf();
+	snappy::iSnappyStream isnstrm(ifile);
+	std::cout << isnstrm.rdbuf();
 }
 
 int main(int argc, char * argv[])
