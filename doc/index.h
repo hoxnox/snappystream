@@ -11,6 +11,7 @@
 <tr><td>
 @author Merder Kim <hoxnox@gmail.com>
 @date 20130112
+@copyright BSD license
 </td><td width=150px>
 </td></tr></table>
 
@@ -78,6 +79,5 @@ g++ -I"snappy-stream/include" -L"snappy-stream/build" example.cpp -lsnappystream
 @endcmd
 
 @include example_main.cpp
-
 
 */

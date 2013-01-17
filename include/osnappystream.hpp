@@ -1,5 +1,5 @@
-/*@author $uername$ <$usermail$>
- *@date $date$*/
+/*@author $uername$ <hoxnox@gmail.com>
+ *@date 20130117 22:25:30 */
 
 
 #ifndef __OSNAPPYSTREAM_HPP__

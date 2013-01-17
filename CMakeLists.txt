@@ -1,4 +1,4 @@
-# @author Nosov Yuri <hoxnox@gmail.com>
+# @author  Merder Kim <hoxnox@gmail.com>
 # SnappyStream cmake build script
 # $date
 
