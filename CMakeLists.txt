@@ -112,3 +112,12 @@ else( BUILD_TESTS )
 	message(STATUS "Tests disabled. Use -DBUILD_TESTS=TRUE to enable it.")
 endif( BUILD_TESTS )
 
+###########################################################################
+# install
+
+install(FILES ./include/isnappystream.hpp
+              ./include/osnappystream.hpp
+              ./include/snappystreamcfg.hpp
+              ./include/snappystream.hpp
+        DESTINATION include)
+install_targets(/lib  snappystream)
