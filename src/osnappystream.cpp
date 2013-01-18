@@ -22,7 +22,7 @@ namespace snappy {
  * @example example.cpp*/
 
 /**@brief Construct compressed streambuf, based on other streambuf*/
-oSnappyStreambuf::oSnappyStreambuf(std::streambuf* dest, unsigned chunksize)
+oSnappyStreambuf::oSnappyStreambuf(std::streambuf* dest, size_t chunksize)
 	: dest_(dest)
 	, write_cksums_(true)
 	, in_buffer_(new char[chunksize])
