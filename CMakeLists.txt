@@ -121,3 +121,12 @@ install(FILES ./include/isnappystream.hpp
               ./include/snappystream.hpp
         DESTINATION include)
 install_targets(/lib  snappystream)
+
+
+###########################################################################
+# snap
+
+if(NOT WITHOUT_SNAP)
+	add_executable(snap ./misc/snap.cpp)
+	target_link_libraries(snap ${SNAPPY_LIBRARIES} snappystream)
+endif()
