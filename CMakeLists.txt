@@ -17,6 +17,7 @@ option(BUILD_STATIC_LIBS "Build static libraries" ON)
 # do not want memory problems with two runtime libs works together (see DLL HELL problem)).
 option(SNSTRM_FORCE_SHARED_CRT
 	"Use shared (DLL) run-time lib even when enty is built as static lib." OFF)
+option(WITHOUT_CRC32C "Don't build crc32c utility" ON)
 option(BUILD_TESTS "Build enty tests." OFF)
 option(BUILD_GTEST "Build gtest with the project. Usefull for windows systems, to prevent DLL-HELL" OFF)
 option(GENERATE_DOC "Don't generate docs" ON)
@@ -137,4 +138,9 @@ install_targets(/lib  snappystream)
 if(NOT WITHOUT_SNAP)
 	add_executable(snap ./misc/snap.cpp)
 	target_link_libraries(snap ${SNAPPY_LIBRARIES} snappystream)
+endif()
+
+if(NOT WITHOUT_CRC32C)
+	add_executable(crc32c ./misc/calc-crc32c.cpp)
+	target_link_libraries(crc32c ${SNAPPY_LIBRARIES} snappystream)
 endif()
