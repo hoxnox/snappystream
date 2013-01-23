@@ -10,7 +10,7 @@
 
 #include "isnappystream.hpp"
 #include "snappy.h"
-#include "crc32c.h"
+#include "crc32c.hpp"
 #include "endians.hpp"
 
 namespace snappy {

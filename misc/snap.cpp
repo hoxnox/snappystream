@@ -10,6 +10,7 @@ using namespace snappy;
 
 int main(int argc, char *argv[])
 {
+	std::ios::sync_with_stdio(false);
 	if(argc < 2)
 	{
 		std::cerr << "Usage: " << argv[0] << " x|c" << std::endl;

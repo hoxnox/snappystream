@@ -20,6 +20,7 @@ option(SNSTRM_FORCE_SHARED_CRT
 option(BUILD_TESTS "Build enty tests." OFF)
 option(BUILD_GTEST "Build gtest with the project. Usefull for windows systems, to prevent DLL-HELL" OFF)
 option(GENERATE_DOC "Don't generate docs" ON)
+option(PROFILE "Add gprof options -g and -pg" OFF)
 
 ###############################################################################
 # general
@@ -50,8 +51,7 @@ set(SRC ./include/osnappystream.hpp
         ./src/osnappystream.cpp
         ./include/isnappystream.hpp
         ./src/isnappystream.cpp
-        ./src/crc32c.h
-        ./src/crc32c.c
+        ./src/crc32c.hpp
         ./include/snappystreamcfg.hpp
         ./src/snappystreamcfg.cpp
         ./src/endians.hpp)
@@ -59,6 +59,15 @@ nx_add_library(${PROJECT_NAME} ${SNSTRM_FORCE_SHARED_CRT} ${BUILD_STATIC_LIBS} $
 	"SNSTRM_SHARED" "ver" "${SRC}")
 target_link_libraries(${PROJECT_NAME} ${SNAPPY_LIBRARIES})
 set(LIBRARIES ${PROJECT_NAME})
+
+###########################################################################
+# gprof
+
+if( PROFILE )
+	add_definitions(-pg)
+	add_definitions(-g)
+	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -pg")
+endif()
 
 ###########################################################################
 # docs
@@ -81,8 +90,7 @@ if( BUILD_TESTS )
 		./include/isnappystream.hpp
 		./src/isnappystream.cpp
 		./src/snappystreamcfg.cpp
-		./src/crc32c.h
-		./src/crc32c.c
+		./src/crc32c.hpp
 		./test/test.cpp
 		./test/tsnappystream.hpp
 		./test/tcrc32c.hpp
