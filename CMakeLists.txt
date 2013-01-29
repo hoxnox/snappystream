@@ -74,11 +74,15 @@ endif()
 # docs
 
 if(GENERATE_DOC)
-	FIND_PACKAGE(Doxygen REQUIRED)
-	set(ENV{SNSTRM_ROOT} ${PROJECT_SOURCE_DIR})
-	ADD_CUSTOM_TARGET(doc COMMAND ${CMAKE_COMMAND} 
-		-D PDIR="${PROJECT_SOURCE_DIR}"
-		-P "${PROJECT_SOURCE_DIR}/doc/doxygen.cmake")
+	FIND_PACKAGE(Doxygen)
+	if(DOXYGEN_FOUND)
+		set(ENV{SNSTRM_ROOT} ${PROJECT_SOURCE_DIR})
+		ADD_CUSTOM_TARGET(doc COMMAND ${CMAKE_COMMAND} 
+			-D PDIR="${PROJECT_SOURCE_DIR}"
+			-P "${PROJECT_SOURCE_DIR}/doc/doxygen.cmake")
+	else()
+		message(WARNING "Doxygen not found. Documentation wouldn't be generated")
+	endif()
 endif()
 
 ##########################################################################
