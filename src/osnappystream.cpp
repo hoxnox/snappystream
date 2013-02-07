@@ -38,7 +38,10 @@ oSnappyStreambuf::~oSnappyStreambuf()
 	delete[] in_buffer_;
 }
 
-/**@brief Set boundaries of the controlled output sequence and write magic to dest_*/
+/**@brief Set boundaries of the controlled output sequence and write magic to dest_
+ *
+ * @note When you close parent stream, and open new one, you should directly initialize it, if it is
+ * empty.*/
 void oSnappyStreambuf::init()
 {
 	if (dest_->sputn(reinterpret_cast<const char*>(Config::magic), 7)  != 7)

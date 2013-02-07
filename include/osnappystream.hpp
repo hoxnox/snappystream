@@ -19,6 +19,7 @@ class oSnappyStreambuf: public std::streambuf
 		explicit oSnappyStreambuf(std::streambuf* dest,
 		                          size_t chunksize = Config::defaultChunkSize);
 		virtual ~oSnappyStreambuf();
+		virtual void init();
 
 	protected:
 		virtual int_type overflow(int_type c = traits_type::eof());
@@ -28,7 +29,6 @@ class oSnappyStreambuf: public std::streambuf
 		               bool compressed,
 		               uint32_t cksum);
 		virtual int  sync();
-		virtual void init();
 
 	private:
 		std::streambuf*  dest_;
