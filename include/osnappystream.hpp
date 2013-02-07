@@ -19,7 +19,7 @@ class oSnappyStreambuf: public std::streambuf
 		explicit oSnappyStreambuf(std::streambuf* dest,
 		                          size_t chunksize = Config::defaultChunkSize);
 		virtual ~oSnappyStreambuf();
-		virtual void init();
+		void init();
 
 	protected:
 		virtual int_type overflow(int_type c = traits_type::eof());
@@ -43,6 +43,7 @@ class oSnappyStream: public std::ostream
 	public:
 		explicit oSnappyStream(std::ostream& out, unsigned chunksize =
 				Config::defaultChunkSize);
+		void init() { osbuf_.init(); }
 	private:
 		oSnappyStreambuf osbuf_;
 };

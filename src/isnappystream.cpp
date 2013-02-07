@@ -30,6 +30,9 @@ iSnappyStreambuf::int_type iSnappyStreambuf::underflow()
 	char header[7];
 	if (src_->sgetn(header, 7) != 7)
 		return EOF;
+	if( strncmp(header, Config::magic, 7) == 0 ) //! Magic must be the same size as header
+		if (src_->sgetn(header, 7) != 7)
+			return EOF;
 
 	bool compressed = true;
 	if(header[0] == 0)
