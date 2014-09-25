@@ -33,6 +33,7 @@ nx_configure()
 
 set(SNSTRM_VERSION_MAJOR 0)
 set(SNSTRM_VERSION_MINOR 1)
+set(SNSTRM_VERSION_PATCH 1)
 # configuration header
 configure_file(
 	"${PROJECT_SOURCE_DIR}/snappystream.cfg"
