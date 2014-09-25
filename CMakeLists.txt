@@ -112,7 +112,7 @@ if( BUILD_TESTS )
 			PREFIX "gtest"
 			CONFIGURE_COMMAND ${CMAKE_COMMAND} <SOURCE_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
 			                                                -DBUILD_SHARED_LIBS=False
-			INSTALL_COMMAND cp -r <BINARY_DIR>/libgtest.a <SOURCE_DIR>/include/gtest <INSTALL_DIR>
+			INSTALL_COMMAND ""
 			LOG_DOWNLOAD 1
 			LOG_UPDATE 1
 			LOG_CONFIGURE 1
@@ -120,10 +120,10 @@ if( BUILD_TESTS )
 			LOG_TEST 1
 			LOG_INSTALL 1
 		)
-		ExternalProject_Get_Property(gtestlib INSTALL_DIR)
+		ExternalProject_Get_Property(gtestlib BINARY_DIR)
 		ExternalProject_Get_Property(gtestlib SOURCE_DIR)
 		set(GTEST_INCLUDE_DIRS ${SOURCE_DIR}/include)
-		set(GTEST_LIBRARIES ${INSTALL_DIR}/libgtest.a)
+		set(GTEST_LIBRARIES ${BINARY_DIR}/libgtest.a)
 	else()
 		find_package(GTest REQUIRED)
 	endif()
