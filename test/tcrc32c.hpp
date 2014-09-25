@@ -3,7 +3,7 @@
  *
  * CRC32C tests*/
 
-#include <crc32c.h>
+#include <crc32c.hpp>
 
 class TestCRC32C : public ::testing::Test
 {
