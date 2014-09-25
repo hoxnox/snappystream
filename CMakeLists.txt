@@ -33,7 +33,7 @@ nx_configure()
 
 set(SNSTRM_VERSION_MAJOR 0)
 set(SNSTRM_VERSION_MINOR 1)
-set(SNSTRM_VERSION_PATCH 1)
+set(SNSTRM_VERSION_PATCH 2)
 # configuration header
 configure_file(
 	"${PROJECT_SOURCE_DIR}/snappystream.cfg"
@@ -131,6 +131,7 @@ if( BUILD_TESTS )
 	include_directories(${GTEST_INCLUDE_DIRS})
 	set(TEST test_${PROJECT_NAME})
 	add_executable(${TEST} ${SOURCES_TEST})
+	add_dependencies(${TEST} gtestlib)
 	if(NOT WIN32)
 		SET_TARGET_PROPERTIES(${TEST} PROPERTIES LINK_FLAGS -pthread)
 	endif(NOT WIN32)
