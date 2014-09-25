@@ -18,8 +18,8 @@ option(BUILD_STATIC_LIBS "Build static libraries" ON)
 option(SNSTRM_FORCE_SHARED_CRT
 	"Use shared (DLL) run-time lib even when enty is built as static lib." OFF)
 option(WITHOUT_CRC32C "Don't build crc32c utility" ON)
-option(BUILD_TESTS "Build enty tests." OFF)
-option(BUILD_GTEST "Build gtest with the project. Usefull for windows systems, to prevent DLL-HELL" OFF)
+option(BUILD_TESTS "Build tests." OFF)
+option(BUILD_GTEST "Build gtest with the project. Usefull for windows systems, to prevent DLL-HELL" ON)
 option(GENERATE_DOC "Don't generate docs" ON)
 option(PROFILE "Add gprof options -g and -pg" OFF)
 
@@ -77,7 +77,7 @@ if(GENERATE_DOC)
 	FIND_PACKAGE(Doxygen)
 	if(DOXYGEN_FOUND)
 		set(ENV{SNSTRM_ROOT} ${PROJECT_SOURCE_DIR})
-		ADD_CUSTOM_TARGET(doc COMMAND ${CMAKE_COMMAND} 
+		ADD_CUSTOM_TARGET(doc COMMAND ${CMAKE_COMMAND}
 			-D PDIR="${PROJECT_SOURCE_DIR}"
 			-P "${PROJECT_SOURCE_DIR}/doc/doxygen.cmake")
 	else()
@@ -87,6 +87,8 @@ endif()
 
 ##########################################################################
 # tests
+
+
 
 if( BUILD_TESTS )
 	set(SOURCES_TEST
@@ -101,26 +103,38 @@ if( BUILD_TESTS )
 		./test/tcrc32c.hpp
 	)
 	if(BUILD_GTEST)
-		#TODO: Find and check GTEST_SOURCES
-		set(GTEST_SOURCES "${PROJECT_SOURCE_DIR}/../gtest")
-		enable_testing()
-		set(TEST test_${PROJECT_NAME})
-				include_directories("${GTEST_SOURCES}/src")
-		add_executable(${TEST} ${SOURCES_TEST})
-		target_link_libraries("${TEST}" gtest ${SNAPPY_LIBRARIES})
-		nx_GTEST_ADD_TESTS("${TEST}" ${SOURCES_TEST})
-	else(BUILD_GTEST)
-		enable_testing()
+		include(ExternalProject)
+		ExternalProject_Add(
+			gtestlib
+			URL http://googletest.googlecode.com/files/gtest-1.7.0.zip
+			#SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk/
+			PREFIX "gtest"
+			CONFIGURE_COMMAND ${CMAKE_COMMAND} <SOURCE_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+			                                                -DBUILD_SHARED_LIBS=False
+			INSTALL_COMMAND cp -r <BINARY_DIR>/libgtest.a <SOURCE_DIR>/include/gtest <INSTALL_DIR>
+			LOG_DOWNLOAD 1
+			LOG_UPDATE 1
+			LOG_CONFIGURE 1
+			LOG_BUILD 1
+			LOG_TEST 1
+			LOG_INSTALL 1
+		)
+		ExternalProject_Get_Property(gtestlib INSTALL_DIR)
+		ExternalProject_Get_Property(gtestlib SOURCE_DIR)
+		set(GTEST_INCLUDE_DIRS ${SOURCE_DIR}/include)
+		set(GTEST_LIBRARIES ${INSTALL_DIR}/libgtest.a)
+	else()
 		find_package(GTest REQUIRED)
-		include_directories(${GTEST_INCLUDE_DIRS})
-		set(TEST test_${PROJECT_NAME})
-		add_executable(${TEST} ${SOURCES_TEST})
-		if(NOT WIN32)
-			SET_TARGET_PROPERTIES(${TEST} PROPERTIES LINK_FLAGS -pthread)
-		endif(NOT WIN32)
-		target_link_libraries("${TEST}" ${GTEST_LIBRARIES} ${SNAPPY_LIBRARIES})
-		nx_GTEST_ADD_TESTS("${TEST}" ${SOURCES_TEST})
-	endif(BUILD_GTEST)
+	endif()
+	enable_testing()
+	include_directories(${GTEST_INCLUDE_DIRS})
+	set(TEST test_${PROJECT_NAME})
+	add_executable(${TEST} ${SOURCES_TEST})
+	if(NOT WIN32)
+		SET_TARGET_PROPERTIES(${TEST} PROPERTIES LINK_FLAGS -pthread)
+	endif(NOT WIN32)
+	target_link_libraries("${TEST}" ${GTEST_LIBRARIES} ${SNAPPY_LIBRARIES})
+	nx_GTEST_ADD_TESTS("${TEST}" ${SOURCES_TEST})
 else( BUILD_TESTS )
 	message(STATUS "Tests disabled. Use -DBUILD_TESTS=TRUE to enable it.")
 endif( BUILD_TESTS )
