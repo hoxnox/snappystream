@@ -41,6 +41,8 @@ class oSnappyStreambuf: public std::streambuf
 class oSnappyStream: public std::ostream
 {
 	public:
+		explicit oSnappyStream(std::streambuf& outbuf, unsigned chunksize =
+				Config::defaultChunkSize);
 		explicit oSnappyStream(std::ostream& out, unsigned chunksize =
 				Config::defaultChunkSize);
 		void init() { osbuf_.init(); }

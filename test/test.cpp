@@ -10,7 +10,11 @@
 #include <gtest/gtest.h>
 
 // test cases
+#include <snappystreamcfg.hpp>
 #include "tsnappystream.hpp"
+#ifdef SNSTRM_WITH_BOOST_IOSTREAMS
+#include "tboost_filters.hpp"
+#endif
 #include "tcrc32c.hpp"
 
 int main(int argc, char *argv[])
