@@ -164,11 +164,19 @@ endif( BUILD_TESTS )
 ###########################################################################
 # install
 
-install(FILES ./include/isnappystream.hpp
-              ./include/osnappystream.hpp
-              ./include/snappystreamcfg.hpp
-              ./include/snappystream.hpp
-        DESTINATION include)
+set(SN_FILES
+	./include/isnappystream.hpp
+	./include/osnappystream.hpp
+	./include/snappystreamcfg.hpp
+	./include/snappystream.hpp
+)
+if (WITH_BOOST_IOSTREAMS)
+	list(APPEND SN_FILES
+		./include/OutputSnappyStreamBoostFilter.hpp
+		./include/InputSnappyStreamBoostFilter.hpp)
+endif()
+
+install(FILES ${SN_FILES} DESTINATION include)
 install_targets(/lib  snappystream)
 
 
