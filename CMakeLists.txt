@@ -22,6 +22,7 @@ option(BUILD_TESTS "Build tests." OFF)
 option(BUILD_GTEST "Build gtest with the project. Usefull for windows systems, to prevent DLL-HELL" ON)
 option(GENERATE_DOC "Don't generate docs" ON)
 option(PROFILE "Add gprof options -g and -pg" OFF)
+option(WITH_BOOST_IOSTREAMS "Include boost::iostreams filters" OFF)
 
 ###############################################################################
 # general
@@ -31,9 +32,13 @@ project(snappystream)
 include("${PROJECT_SOURCE_DIR}/cmake/ext/nx_utils.cmake")
 nx_configure()
 
+if(WITH_BOOST_IOSTREAMS)
+	set(SNSTRM_WITH_BOOST_IOSTREAMS true)
+endif()
+
 set(SNSTRM_VERSION_MAJOR 0)
-set(SNSTRM_VERSION_MINOR 1)
-set(SNSTRM_VERSION_PATCH 2)
+set(SNSTRM_VERSION_MINOR 2)
+set(SNSTRM_VERSION_PATCH 0)
 # configuration header
 configure_file(
 	"${PROJECT_SOURCE_DIR}/snappystream.cfg"
@@ -45,6 +50,21 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/Modules"
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${PROJECT_SOURCE_DIR}/src")
+
+###########################################################################
+# boost::iostreams
+
+if(WITH_BOOST_IOSTREAMS)
+	if(NOT BOOST_ROOT)
+		set(BOOST_ROOT $ENV{BOOST_ROOT})
+	endif()
+	find_package(Boost 1.36.0 REQUIRED COMPONENTS iostreams system)
+	include_directories(${Boost_INCLUDE_DIRS})
+	list(APPEND LIBRARIES ${Boost_LIBRARIES})
+endif()
+
+###########################################################################
+# snappy
 
 find_package(Snappy REQUIRED)
 include_directories(${SNAPPY_INCLUDE_DIR})
@@ -60,7 +80,7 @@ set(SRC ./include/osnappystream.hpp
 nx_add_library(${PROJECT_NAME} ${SNSTRM_FORCE_SHARED_CRT} ${BUILD_STATIC_LIBS} ${BUILD_SHARED_LIBS}
 	"SNSTRM_SHARED" "ver" "${SRC}")
 target_link_libraries(${PROJECT_NAME} ${SNAPPY_LIBRARIES})
-set(LIBRARIES ${PROJECT_NAME})
+list(APPEND LIBRARIES ${SNAPPY_LIBRARIES})
 
 ###########################################################################
 # gprof
@@ -135,7 +155,7 @@ if( BUILD_TESTS )
 	if(NOT WIN32)
 		SET_TARGET_PROPERTIES(${TEST} PROPERTIES LINK_FLAGS -pthread)
 	endif(NOT WIN32)
-	target_link_libraries("${TEST}" ${GTEST_LIBRARIES} ${SNAPPY_LIBRARIES})
+	target_link_libraries("${TEST}" ${GTEST_LIBRARIES} ${LIBRARIES})
 	nx_GTEST_ADD_TESTS("${TEST}" ${SOURCES_TEST})
 else( BUILD_TESTS )
 	message(STATUS "Tests disabled. Use -DBUILD_TESTS=TRUE to enable it.")

@@ -100,6 +100,14 @@ int oSnappyStreambuf::writeBlock(const char * data, std::streamsize& uncompresse
 	return uncompressed_len;
 }
 
+/**@brief You can create compressed stream over every stream based on std::streambuf
+ * @param chunksize The size of chunks*/
+oSnappyStream::oSnappyStream(std::streambuf& outbuf, unsigned chunksize)
+	: osbuf_(&outbuf, chunksize)
+	, std::ostream(&osbuf_)
+{
+}
+
 /**@brief You can create compressed stream over every stream based on std::ostream
  * @param chunksize The size of chunks*/
 oSnappyStream::oSnappyStream(std::ostream& out, unsigned chunksize)
