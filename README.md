@@ -81,3 +81,30 @@ example:
 		read();
 		return 0;
 	}
+
+## Boost iostreams filters
+
+You can use snappystream with boost::iostreams. Project must be
+configured with `WITH_BOOST_IOSTREAMS` key:
+
+	cmake -DWITH_BOOST_IOSTREAMS=1 ./
+
+In that case snappystream.hpp includes OutputSnappyStreamBoostFilter.hpp
+and InputSnappyStreamBoostFilter.hpp.
+
+Usage example:
+
+		namespace io = boost::iostreams;
+
+		std::ofstream file("/path/to/file", std::ios::binary | std::ios::out);
+		io::filtering_ostream out;
+		out.push(snappy::OutputSnappyStreamBoostFilter());
+		out.push(file);
+		out << ""
+
+		std::ifstream file("/path/to/file", std::ios::binary | std::ios::in);
+		io::filtering_istream in;
+		in.push(snappy::InputSnappyStreamBoostFilter());
+		in.push(file);
+		io::copy(in, std::cout);
+

@@ -1,1 +1,3 @@
 *.swp
+build
+include/snappystreamcfg.hpp

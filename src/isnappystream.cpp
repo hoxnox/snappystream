@@ -76,6 +76,12 @@ iSnappyStreambuf::int_type iSnappyStreambuf::underflow()
 	return traits_type::to_int_type(*(this->gptr()));
 }
 
+iSnappyStream::iSnappyStream(std::streambuf& inbuf)
+	: isbuf_(&inbuf)
+	, std::istream(&isbuf_)
+{
+}
+
 iSnappyStream::iSnappyStream(std::istream& in)
 	: isbuf_(in.rdbuf())
 	, std::istream(&isbuf_)

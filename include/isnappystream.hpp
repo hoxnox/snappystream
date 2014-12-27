@@ -26,6 +26,7 @@ class iSnappyStreambuf: public std::streambuf
 
 class iSnappyStream: public std::istream {
 public:
+	explicit iSnappyStream(std::streambuf& inbuf);
 	explicit iSnappyStream(std::istream& in);
 private:
 	iSnappyStreambuf isbuf_;
