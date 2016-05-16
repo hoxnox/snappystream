@@ -74,14 +74,20 @@ int oSnappyStreambuf::sync()
 
 	uint32_t crc32c = write_cksums_ ? crc32c_masked(in_buffer_, uncompressed_len) : 0;
 
-	string compressed(in_buffer_);
-	std::streamsize compressed_len = Compress(&in_buffer_[0], uncompressed_len, &compressed);
+
+	char* compressed = new char[MaxCompressedLength(uncompressed_len)];
+	size_t compressed_len_sz;
+	RawCompress(in_buffer_, uncompressed_len, compressed, &compressed_len_sz);
 
 	// use uncompressed input if less than 12.5% compression
-	if (compressed_len >= (uncompressed_len - (uncompressed_len / 8))) {
+	if (compressed_len_sz >= (uncompressed_len - (uncompressed_len / 8))) {
+		delete [] compressed;
 		return writeBlock(in_buffer_, uncompressed_len, uncompressed_len, false, crc32c);
 	}
-	return writeBlock(compressed.data(), uncompressed_len, compressed_len, true, crc32c);
+    std::streamsize compressed_len = static_cast<std::streamsize>(compressed_len_sz);
+	int rs = writeBlock(compressed, uncompressed_len, compressed_len, true, crc32c);
+	delete [] compressed;
+	return rs;
 }
 
 int oSnappyStreambuf::writeBlock(const char * data, std::streamsize& uncompressed_len, std::streamsize& length, bool compressed, uint32_t cksum)
