@@ -1,5 +1,4 @@
 from conans import ConanFile, CMake
-from os import chdir
 
 class SnappyStreamConan(ConanFile):
     name = "snappystream"
@@ -8,6 +7,7 @@ class SnappyStreamConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     options = {"boost_iostreams": [True, False]}
     default_options = "boost_iostreams=False", "snappy:shared=False"
+    generators = "cmake"
     exports = "*"
 
     def build(self):
@@ -15,7 +15,7 @@ class SnappyStreamConan(ConanFile):
         boost_iostreams_definition = ""
         if self.options.boost_iostreams:
             boost_iostreams_definition = "-DWITH_BOOST_IOSTREAMS=1" 
-        self.run('cmake %s -DCMAKE_INSTALL_PREFIX=./distr %s %s' % 
+        self.run('cmake %s -DWITH_CONAN=1 -DCMAKE_INSTALL_PREFIX=./distr %s %s' % 
                 (self.conanfile_directory, cmake.command_line, boost_iostreams_definition))
         self.run("cmake --build . %s" % cmake.build_config)
         self.run("make install")
