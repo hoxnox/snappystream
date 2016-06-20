@@ -23,6 +23,7 @@ option(BUILD_GTEST "Build gtest with the project. Usefull for windows systems, t
 option(GENERATE_DOC "Don't generate docs" ON)
 option(PROFILE "Add gprof options -g and -pg" OFF)
 option(WITH_BOOST_IOSTREAMS "Include boost::iostreams filters" OFF)
+option(WITH_CONAN "Use conan to resolve dependencies" OFF)
 
 ###############################################################################
 # general
@@ -52,23 +53,38 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${PROJECT_SOURCE_DIR}/cmake/Modules"
 include_directories("${PROJECT_SOURCE_DIR}/include")
 include_directories("${PROJECT_SOURCE_DIR}/src")
 
+########################################################################
+
+if (WITH_CONAN)
+	include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+	conan_basic_setup()
+	list(APPEND LIBRARIES ${CONAN_LIBS})
+endif()
+
 ###########################################################################
 # boost::iostreams
 
-if(WITH_BOOST_IOSTREAMS)
-	if(NOT BOOST_ROOT)
-		set(BOOST_ROOT $ENV{BOOST_ROOT})
+if (WITH_BOOST_IOSTREAMS)
+	if (NOT WITH_CONAN)
+		if(NOT BOOST_ROOT)
+			set(BOOST_ROOT $ENV{BOOST_ROOT})
+		endif()
+		find_package(Boost 1.36.0 REQUIRED COMPONENTS iostreams system)
+		include_directories(${Boost_INCLUDE_DIRS})
+		list(APPEND LIBRARIES ${Boost_LIBRARIES})
 	endif()
-	find_package(Boost 1.36.0 REQUIRED COMPONENTS iostreams system)
-	include_directories(${Boost_INCLUDE_DIRS})
-	list(APPEND LIBRARIES ${Boost_LIBRARIES})
 endif()
 
 ###########################################################################
 # snappy
 
-find_package(Snappy REQUIRED)
-include_directories(${SNAPPY_INCLUDE_DIR})
+if (NOT WITH_CONAN)
+	find_package(Snappy REQUIRED)
+	include_directories(${SNAPPY_INCLUDE_DIR})
+	list(APPEND LIBRARIES ${SNAPPY_LIBRARIES})
+endif()
+
+########################################################################
 
 set(SRC ./include/osnappystream.hpp
         ./src/osnappystream.cpp
@@ -80,8 +96,7 @@ set(SRC ./include/osnappystream.hpp
         ./src/endians.hpp)
 nx_add_library(${PROJECT_NAME} ${SNSTRM_FORCE_SHARED_CRT} ${BUILD_STATIC_LIBS} ${BUILD_SHARED_LIBS}
 	"SNSTRM_SHARED" "ver" "${SRC}")
-target_link_libraries(${PROJECT_NAME} ${SNAPPY_LIBRARIES})
-list(APPEND LIBRARIES ${SNAPPY_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} ${LIBRARIES})
 
 ###########################################################################
 # gprof
@@ -186,10 +201,11 @@ install_targets(/lib  snappystream)
 
 if(NOT WITHOUT_SNAP)
 	add_executable(snap ./misc/snap.cpp)
-	target_link_libraries(snap ${SNAPPY_LIBRARIES} snappystream)
+	target_link_libraries(snap ${LIBRARIES} snappystream)
 endif()
 
 if(NOT WITHOUT_CRC32C)
 	add_executable(crc32c ./misc/calc-crc32c.cpp)
-	target_link_libraries(crc32c ${SNAPPY_LIBRARIES} snappystream)
+	target_link_libraries(crc32c ${LIBRARIES} snappystream)
 endif()
+
