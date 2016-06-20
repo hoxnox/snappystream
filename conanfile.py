@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 class SnappyStreamConan(ConanFile):
     name = "snappystream"
-    version = "0.2.2"
+    version = "0.2.3"
     requires = "snappy/1.1.3@hoxnox/testing"
     settings = "os", "compiler", "build_type", "arch"
     options = {"boost_iostreams": [True, False]}

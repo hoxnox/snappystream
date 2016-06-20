@@ -130,7 +130,7 @@ project. All you need - conan executable, conanfile.txt
 
 ```sh
 [requires]
-snappystream/0.2.2@hoxnox/testing
+snappystream/0.2.3@hoxnox/testing
 [generators]
 cmake
 ```
