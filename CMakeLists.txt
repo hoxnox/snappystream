@@ -143,11 +143,14 @@ if( BUILD_TESTS )
 		include(ExternalProject)
 		ExternalProject_Add(
 			gtestlib
-			URL http://googletest.googlecode.com/files/gtest-1.7.0.zip
-			#SVN_REPOSITORY http://googletest.googlecode.com/svn/trunk/
+			URL https://github.com/google/googletest/archive/release-1.8.0.tar.gz
+			URL_HASH SHA256=58a6f4277ca2bc8565222b3bbd58a177609e9c488e8a72649359ba51450db7d8 
+			DOWNLOAD_NAME googletest-release-1.8.0.tar.gz
 			PREFIX "gtest"
-			CONFIGURE_COMMAND ${CMAKE_COMMAND} <SOURCE_DIR> -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
-			                                                -DBUILD_SHARED_LIBS=False
+			CMAKE_ARGS -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+			           -DBUILD_SHARED_LIBS=False
+			           -DCMAKE_CXX_COMPILER:STRING='${CMAKE_CXX_COMPILER}'
+			           -DCMAKE_CXX_FLAGS:STRING='${CMAKE_CXX_FLAGS}'
 			INSTALL_COMMAND ""
 			LOG_DOWNLOAD 1
 			LOG_UPDATE 1
@@ -159,7 +162,7 @@ if( BUILD_TESTS )
 		ExternalProject_Get_Property(gtestlib BINARY_DIR)
 		ExternalProject_Get_Property(gtestlib SOURCE_DIR)
 		set(GTEST_INCLUDE_DIRS ${SOURCE_DIR}/include)
-		set(GTEST_LIBRARIES ${BINARY_DIR}/libgtest.a)
+        set(GTEST_LIBRARIES ${BINARY_DIR}/libgtest_main.a ${BINARY_DIR}/libgtest.a)
 	else()
 		find_package(GTest REQUIRED)
 	endif()
