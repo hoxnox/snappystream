@@ -148,6 +148,8 @@ if( BUILD_TESTS )
 			DOWNLOAD_NAME googletest-release-1.8.0.tar.gz
 			PREFIX "gtest"
 			CMAKE_ARGS -DCMAKE_PREFIX_PATH=<INSTALL_DIR>
+			           -DBUILD_GTEST=ON
+			           -DBUILD_GMOCK=OFF
 			           -DBUILD_SHARED_LIBS=False
 			           -DCMAKE_CXX_COMPILER:STRING='${CMAKE_CXX_COMPILER}'
 			           -DCMAKE_CXX_FLAGS:STRING='${CMAKE_CXX_FLAGS}'
@@ -161,8 +163,8 @@ if( BUILD_TESTS )
 		)
 		ExternalProject_Get_Property(gtestlib BINARY_DIR)
 		ExternalProject_Get_Property(gtestlib SOURCE_DIR)
-		set(GTEST_INCLUDE_DIRS ${SOURCE_DIR}/include)
-        set(GTEST_LIBRARIES ${BINARY_DIR}/libgtest_main.a ${BINARY_DIR}/libgtest.a)
+		set(GTEST_INCLUDE_DIRS ${SOURCE_DIR}/googletest/include)
+		set(GTEST_LIBRARIES ${BINARY_DIR}/googletest/libgtest_main.a ${BINARY_DIR}/googletest/libgtest.a)
 	else()
 		find_package(GTest REQUIRED)
 	endif()
