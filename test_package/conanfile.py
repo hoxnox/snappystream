@@ -6,7 +6,7 @@ username = os.getenv("CONAN_USERNAME", "hoxnox")
 
 class SnappyStreamTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
-    requires = "snappystream/0.2.4@%s/%s" % (username, channel)
+    requires = "snappystream/0.2.7@%s/%s" % (username, channel)
     generators = "cmake"
 
     def build(self):
