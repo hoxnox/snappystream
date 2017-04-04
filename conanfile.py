@@ -2,7 +2,7 @@ from conans import ConanFile, CMake
 
 class SnappyStreamConan(ConanFile):
     name = "snappystream"
-    version = "0.2.4"
+    version = "0.2.7"
     requires = "snappy/1.1.4@hoxnox/testing"
     settings = "os", "compiler", "build_type", "arch"
     options = {"boost_iostreams": [True, False]}
@@ -27,7 +27,7 @@ class SnappyStreamConan(ConanFile):
             boost_iostreams_definition = "-DWITH_BOOST_IOSTREAMS=1"
         self.run('cmake -DWITH_CONAN=1 -DCMAKE_INSTALL_PREFIX=%s %s %s %s' %
                 (self.package_folder, cmake.command_line, boost_iostreams_definition, self.conanfile_directory))
-        self.run("make VERBOSE=1 install")
+        self.run("cmake --build . --target install %s" % cmake.build_config)
 
     def package_info(self):
         self.cpp_info.libs = ["snappystream"]
