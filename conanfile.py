@@ -2,6 +2,8 @@ from conans import ConanFile, CMake
 
 class SnappyStreamConan(ConanFile):
     name = "snappystream"
+    description = "Snappy, fast compressor/decompressor streambuffer. See https://github.com/hoxnox/snappystream"
+    license = "https://github.com/hoxnox/snappystream/blob/master/COPYING"
     version = "0.2.7"
     requires = "snappy/1.1.4@hoxnox/testing"
     settings = "os", "compiler", "build_type", "arch"
@@ -19,6 +21,11 @@ class SnappyStreamConan(ConanFile):
                "CMakeLists.txt",
                "README.markdown")
     url = "https://github.com/hoxnox/snappystream.git"
+
+    def config(self):
+        if self.options.boost_iostreams:
+            self.requires.add("Boost/1.60.0@lasote/stable", private=False)
+            self.options["Boost"].shared = False
 
     def build(self):
         cmake = CMake(self.settings)
