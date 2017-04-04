@@ -2,8 +2,8 @@ from conans import ConanFile, CMake
 
 class SnappyStreamConan(ConanFile):
     name = "snappystream"
-    version = "0.2.3"
-    requires = "snappy/1.1.3@hoxnox/testing"
+    version = "0.2.4"
+    requires = "snappy/1.1.4@hoxnox/testing"
     settings = "os", "compiler", "build_type", "arch"
     options = {"boost_iostreams": [True, False]}
     default_options = "boost_iostreams=False", "snappy:shared=False"
@@ -13,6 +13,9 @@ class SnappyStreamConan(ConanFile):
                "misc/snap.cpp",
                "snappystream.cfg",
                "cmake/ext/nx_utils.cmake",
+               "cmake/Modules/FindSnappy.cmake",
+               "cmake/Modules/gtest.cmake",
+               "cmake/Modules/Vendoring.cmake",
                "CMakeLists.txt",
                "README.markdown")
     url = "https://github.com/hoxnox/snappystream.git"
@@ -22,15 +25,9 @@ class SnappyStreamConan(ConanFile):
         boost_iostreams_definition = ""
         if self.options.boost_iostreams:
             boost_iostreams_definition = "-DWITH_BOOST_IOSTREAMS=1"
-        self.run('cmake %s -DWITH_CONAN=1 -DCMAKE_INSTALL_PREFIX=./distr %s %s' %
-                (self.conanfile_directory, cmake.command_line, boost_iostreams_definition))
-        self.run("cmake --build . %s" % cmake.build_config)
-        self.run("make install")
-
-
-    def package(self):
-        self.copy("*.hpp", dst="include", src="distr/include")
-        self.copy("*.a", dst="lib", src="distr/lib")
+        self.run('cmake -DWITH_CONAN=1 -DCMAKE_INSTALL_PREFIX=%s %s %s %s' %
+                (self.package_folder, cmake.command_line, boost_iostreams_definition, self.conanfile_directory))
+        self.run("make VERBOSE=1 install")
 
     def package_info(self):
         self.cpp_info.libs = ["snappystream"]
