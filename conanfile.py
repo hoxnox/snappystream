@@ -5,7 +5,7 @@ class SnappyStreamConan(ConanFile):
     description = "Snappy, fast compressor/decompressor streambuffer. See https://github.com/hoxnox/snappystream"
     license = "https://github.com/hoxnox/snappystream/blob/master/COPYING"
     version = "0.2.7"
-    requires = "snappy/1.1.4@hoxnox/testing"
+    requires = "snappy/1.1.4@hoxnox/stable"
     settings = "os", "compiler", "build_type", "arch"
     options = {"boost_iostreams": [True, False]}
     default_options = "boost_iostreams=False", "snappy:shared=False"
