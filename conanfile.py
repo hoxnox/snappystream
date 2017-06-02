@@ -24,8 +24,8 @@ class SnappyStreamConan(ConanFile):
 
     def config(self):
         if self.options.boost_iostreams:
-            self.requires.add("Boost/1.60.0@lasote/stable", private=False)
-            self.options["Boost"].shared = False
+            self.requires.add("boost/1.64.0@hoxnox/stable", private=False)
+            self.options["boost"].shared = False
 
     def build(self):
         cmake = CMake(self.settings)

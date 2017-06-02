@@ -5,6 +5,7 @@ class SnappyStreamTestConan(ConanFile):
     settings = "os", "compiler", "build_type", "arch"
     requires = "snappystream/0.2.7@hoxnox/stable"
     generators = "cmake"
+    default_options = "snappystream:boost_iostreams=True"
 
     def build(self):
         cmake = CMake(self.settings)
