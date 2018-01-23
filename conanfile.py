@@ -24,19 +24,19 @@ class SnappyStreamConan(ConanFile):
 
     def config(self):
         if self.options.boost_iostreams:
-            self.requires.add("Boost/1.60.0@lasote/stable", private=False)
-            self.options["Boost"].shared = False
+            self.requires.add("boost/1.66.0@conan/stable", private=False)
+            self.options["boost"].shared = False
 
     def build(self):
         cmake = CMake(self)
-        boost_iostreams_definition = ""
-        if self.options.boost_iostreams:
-            boost_iostreams_definition = "-DWITH_BOOST_IOSTREAMS=1"
-        self.run('cmake -DWITH_CONAN=1 -DCMAKE_INSTALL_PREFIX=%s %s %s %s' %
-                (self.package_folder, cmake.command_line,
-                    boost_iostreams_definition, self.source_folder))
-        self.run("cmake --build . --target install %s" % cmake.build_config)
+        cmake.definitions["WITH_BOOST_IOSTREAMS"] = self.options.boost_iostreams
+        cmake.definitions["WITH_CONAN"] = True
+        cmake.configure()
+        cmake.build()
+        cmake.install()
+
+    def package(self):
+        pass
 
     def package_info(self):
         self.cpp_info.libs = ["snappystream"]
-
