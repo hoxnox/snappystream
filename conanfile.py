@@ -4,8 +4,8 @@ class SnappyStreamConan(ConanFile):
     name = "snappystream"
     description = "Snappy, fast compressor/decompressor streambuffer. See https://github.com/hoxnox/snappystream"
     license = "https://github.com/hoxnox/snappystream/blob/master/COPYING"
-    version = "0.2.7"
-    requires = "snappy/1.1.4@hoxnox/testing"
+    version = "0.2.8"
+    requires = "snappy/1.1.4@hoxnox/stable"
     settings = "os", "compiler", "build_type", "arch"
     options = {"boost_iostreams": [True, False]}
     default_options = "boost_iostreams=False", "snappy:shared=False"
@@ -24,18 +24,19 @@ class SnappyStreamConan(ConanFile):
 
     def config(self):
         if self.options.boost_iostreams:
-            self.requires.add("Boost/1.60.0@lasote/stable", private=False)
-            self.options["Boost"].shared = False
+            self.requires.add("boost/1.66.0@conan/stable", private=False)
+            self.options["boost"].shared = False
 
     def build(self):
-        cmake = CMake(self.settings)
-        boost_iostreams_definition = ""
-        if self.options.boost_iostreams:
-            boost_iostreams_definition = "-DWITH_BOOST_IOSTREAMS=1"
-        self.run('cmake -DWITH_CONAN=1 -DCMAKE_INSTALL_PREFIX=%s %s %s %s' %
-                (self.package_folder, cmake.command_line, boost_iostreams_definition, self.conanfile_directory))
-        self.run("cmake --build . --target install %s" % cmake.build_config)
+        cmake = CMake(self)
+        cmake.definitions["WITH_BOOST_IOSTREAMS"] = self.options.boost_iostreams
+        cmake.definitions["WITH_CONAN"] = True
+        cmake.configure()
+        cmake.build()
+        cmake.install()
+
+    def package(self):
+        pass
 
     def package_info(self):
         self.cpp_info.libs = ["snappystream"]
-

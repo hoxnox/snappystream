@@ -128,9 +128,16 @@ io::copy(in, std::cout);
 You can use [conan](http://conan.io) to easily include snappystream into your
 project. All you need - conan executable, conanfile.txt
 
+Add repository: 
+
+```sh
+conan remote add hoxnox https://api.bintray.com/conan/hoxnox/conan
+```
+file conanfile.txt:
+
 ```sh
 [requires]
-snappystream/0.2.3@hoxnox/testing
+snappystream/0.2.8@hoxnox/stable
 [generators]
 cmake
 ```
@@ -152,7 +159,7 @@ Building is simple:
 
 ```sh
 mkdir build && cd build
-conan install .. --build=missing
+conan install --build=missing ..
 cmake ..
 make install
 ```
