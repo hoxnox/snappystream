@@ -24,7 +24,7 @@ class SnappyStreamConan(ConanFile):
 
     def config(self):
         if self.options.boost_iostreams:
-            self.requires.add("boost/1.66.0@conan/stable", private=False)
+            self.requires.add("boost/[>=1.44.0]@conan/stable", private=False)
             self.options["boost"].shared = False
 
     def build(self):
