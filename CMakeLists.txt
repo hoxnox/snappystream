@@ -38,7 +38,7 @@ endif()
 
 set(SNSTRM_VERSION_MAJOR 0)
 set(SNSTRM_VERSION_MINOR 2)
-set(SNSTRM_VERSION_PATCH 8)
+set(SNSTRM_VERSION_PATCH 9)
 
 # configuration header
 configure_file(
