@@ -81,12 +81,12 @@ TEST_F(TestBoostIOFilter, snappy)
 		for (size_t i = middle; i < hello_world.length(); ++i)
 			out << hello_world[i];
 	}
-	const char snapped_helloworld[] = {
+	const uint8_t snapped_helloworld[] = {
 		0x73, 0x6E, 0x61, 0x70, 0x70, 0x79, 0x00, 0x01, 0x00, 0x10,
 		0x16, 0xB8, 0xDD, 0x69, 0x23, 0x28, 0x48, 0x65, 0x6C, 0x6C,
 		0x6F, 0x20, 0x77, 0x6F, 0x72, 0x6C, 0x64, 0x5E, 0x06, 0x00
 	};
-	ASSERT_TRUE(check_file(snapped_helloworld, sizeof(snapped_helloworld)));
+	ASSERT_TRUE(check_file((char*)snapped_helloworld, sizeof(snapped_helloworld)));
 
 	{
 		namespace io = boost::iostreams;
