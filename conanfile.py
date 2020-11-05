@@ -5,7 +5,7 @@ class SnappyStreamConan(ConanFile):
     description = "Snappy, fast compressor/decompressor streambuffer. See https://github.com/hoxnox/snappystream"
     license = "https://github.com/hoxnox/snappystream/blob/master/COPYING"
     version = "1.0.0"
-    requires = "snappy/1.1.4@hoxnox/stable"
+    requires = "snappy/1.1.8"
     settings = "os", "compiler", "build_type", "arch"
     options = {"boost_iostreams": [True, False]}
     default_options = "boost_iostreams=False", "snappy:shared=False"
@@ -24,12 +24,16 @@ class SnappyStreamConan(ConanFile):
 
     def config(self):
         if self.options.boost_iostreams:
-            self.requires.add("boost/[>=1.44.0]@conan/stable", private=False)
+            self.requires.add("boost/[>=1.44.0]", private=False)
             self.options["boost"].shared = False
 
     def build(self):
         cmake = CMake(self)
-        cmake.definitions["WITH_BOOST_IOSTREAMS"] = self.options.boost_iostreams
+        if self.options.boost_iostreams:
+            cmake.definitions["WITH_BOOST_IOSTREAMS"] = self.options.boost_iostreams
+            cmake.definitions["BOOST_ROOT"] = self.deps_cpp_info["boost"].rootpath
+            cmake.definitions["ZLIB_ROOT"] = self.deps_cpp_info["zlib"].rootpath
+        cmake.definitions["SNAPPY_ROOT"] = self.deps_cpp_info["snappy"].rootpath
         cmake.definitions["WITH_CONAN"] = True
         cmake.configure()
         cmake.build()
