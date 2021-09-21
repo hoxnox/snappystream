@@ -7,8 +7,8 @@ class SnappyStreamConan(ConanFile):
     version = "1.0.0"
     requires = "snappy/1.1.8"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"boost_iostreams": [True, False]}
-    default_options = "boost_iostreams=False", "snappy:shared=False"
+    options = {"boost_iostreams": [True, False], "snap": [True, False]}
+    default_options = "boost_iostreams=False", "snappy:shared=False", "snap=False"
     generators = "cmake"
     exports = ("include/*.hpp",
                "src/*.hpp", "src/*.cpp",
@@ -33,6 +33,7 @@ class SnappyStreamConan(ConanFile):
             cmake.definitions["WITH_BOOST_IOSTREAMS"] = self.options.boost_iostreams
             cmake.definitions["BOOST_ROOT"] = self.deps_cpp_info["boost"].rootpath
             cmake.definitions["ZLIB_ROOT"] = self.deps_cpp_info["zlib"].rootpath
+        cmake.definitions["WITHOUT_SNAP"] = not self.options.snap
         cmake.definitions["SNAPPY_ROOT"] = self.deps_cpp_info["snappy"].rootpath
         cmake.definitions["WITH_CONAN"] = True
         cmake.configure()
