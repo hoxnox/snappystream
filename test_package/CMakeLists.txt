@@ -1,9 +1,9 @@
-PROJECT(SnappyStreamTest)
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.15)
+PROJECT(ConanTest)
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
-conan_set_find_paths()
+set(CMAKE_CXX_STANDARD 17)
 
-ADD_EXECUTABLE(pkg_test test.cpp)
-TARGET_LINK_LIBRARIES(pkg_test ${CONAN_LIBS})
+find_package(snappystream REQUIRED)
+
+add_executable(test_package test.cpp)
+target_link_libraries(test_package snappystream::snappystream)
