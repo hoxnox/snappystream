@@ -37,10 +37,10 @@ class SnappyStreamConan(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
-        cmake.install()
 
     def package(self):
-        pass
+        cmake = CMake(self)
+        cmake.install()
 
     def package_info(self):
         self.cpp_info.libs = ["snappystream"]

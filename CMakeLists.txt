@@ -89,8 +89,7 @@ set(SRC ./include/osnappystream.hpp
         ./include/snappystreamcfg.hpp
         ./src/snappystreamcfg.cpp
         ./src/endians.hpp)
-nx_add_library(${PROJECT_NAME} ${SNSTRM_FORCE_SHARED_CRT} ${BUILD_STATIC_LIBS}
-	${BUILD_SHARED_LIBS} "SNSTRM_SHARED" "ver" "${SRC}")
+add_library(snappystream ${SRC})
 
 ###########################################################################
 # gprof
@@ -129,7 +128,7 @@ if (WITH_BOOST_IOSTREAMS)
 endif()
 
 install(FILES ${SN_FILES} DESTINATION include)
-install_targets(/lib  snappystream)
+install(TARGETS snappystream DESTINATION lib)
 
 
 ###########################################################################
